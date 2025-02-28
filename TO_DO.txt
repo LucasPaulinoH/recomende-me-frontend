@@ -1,0 +1,31 @@
+Teste Técnico - Desenvolvedor Frontend (RecomendeMe)
+
+Objetivo: desenvolver uma aplicação frontend que consuma uma API e exiba recomendações baseadas em conceitos 
+da psicologia.
+
+Requisitos
+
+Consumo de API:
+- A aplicação deve consumir uma API (pode ser simulada via JSON ou criada pelo candidato).
+
+Apresentação das Recomendações:
+- Exibir recomendações de livros, filmes ou músicas.
+- Cada recomendação deve incluir um conceito psicológico relacionado (exemplo: Cognição, Emoção, Motivação).
+- Explicar brevemente o impacto psicológico da recomendação.
+
+Estrutura de Dados:
+- O candidato deve utilizar uma estrutura de dados, como lista encadeada, árvore ou grafo, para armazenar e 
+manipular os dados da API.
+
+UI/UX:
+- Criar uma interface amigável e bem estruturada;
+- Uso de frameworks como React.js ou Vue.js é recomendado;
+
+Extras (Opcional):
+- Implementar uma barra de pesquisa para filtrar recomendações;
+- Adicionar animações ou transições para melhorar a experiência do usuário;
+
+Entrega:
+- O candidato deve enviar um link para o repositório no GitHub/GitLab com instruções para rodar o projeto;
+- Caso utilize um framework frontend, incluir as dependências no package.json;
+- Um breve README.md explicando a abordagem utilizada.
