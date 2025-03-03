@@ -1,22 +1,19 @@
 import { useEffect, useState } from "react";
 import { Recommendation } from "../services/Recommendation/Recommendation";
 import recommendationApi from "../services/Recommendation";
-import { RecommendationType } from "../types/RecommendationType";
+import useSelectedType from "./useSelectedType";
 
 const useFetchRecommendations = () => {
   const [recommendations, setRecommendations] = useState<
     Recommendation[] | null
   >(null);
 
-  const selectedCategory =
-    JSON.parse(localStorage.getItem("category")!) ?? RecommendationType.MOVIE;
+  const { selectedType } = useSelectedType();
 
   const fetchRecommendations = async () => {
     try {
       const recommendationsResponse =
-        await recommendationApi.getAllRecommendationsFromAType(
-          selectedCategory
-        );
+        await recommendationApi.getAllRecommendationsFromAType(selectedType);
 
       setRecommendations(recommendationsResponse);
     } catch (error) {

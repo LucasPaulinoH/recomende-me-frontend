@@ -8,12 +8,14 @@ import { FIREBASE_AUTH } from "../../utils/firebaseConfig.ts";
 const Home = () => {
   const { recommendationsQuantity } = useFetchRecommendationsQuantity();
 
-  const {currentUser} = FIREBASE_AUTH
+  const { currentUser } = FIREBASE_AUTH;
 
   return (
     <div className={PAGE_CONTAINER}>
-     <div>{`Bem-vindo, ${currentUser.email}!`} <SignOutButton /></div>
-      <h1 className="font-bold">Recomendações</h1>
+      <div>
+        {`Bem-vindo, ${currentUser?.displayName}!`} <SignOutButton />
+      </div>
+      <h1 className="font-bold">Selecione uma categoria</h1>
 
       <div className="flex gap-20">
         <RecommendationTypeCard

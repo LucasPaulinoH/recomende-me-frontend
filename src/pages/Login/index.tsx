@@ -3,13 +3,17 @@ import { PAGE_CONTAINER } from "../../styles/shared";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../utils/firebaseConfig";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 // TODO: refactor completely
 const Login = () => {
   localStorage.clear();
 
+  const usernameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordConfirmationRef = useRef<HTMLInputElement>(null);
@@ -47,7 +51,12 @@ const Login = () => {
         emailRef.current.value,
         passwordRef.current.value
       );
-      if (registerResponse) alert("Account successfully created!");
+
+      await updateProfile(registerResponse.user, {
+        displayName: usernameRef?.current?.value,
+      });
+
+      alert("Account successfully created!");
     } catch (error) {
       alert("Registration failed: " + error);
     }
@@ -56,49 +65,59 @@ const Login = () => {
   return (
     <div className={PAGE_CONTAINER}>
       <div className="flex flex-col gap-10">
-        <input
-          type="text"
-          required
-          className="border"
-          placeholder="Email *"
-          ref={emailRef}
-        />
-        <input
+        {!loginMode && (
+          <Input
+            type="text"
+            required
+            placeholder="Nome de usuário *"
+            ref={usernameRef}
+          />
+        )}
+        
+        <Input type="text" required placeholder="Email *" ref={emailRef} />
+        <Input
           type="password"
           required
-          className="border"
           placeholder="Senha *"
           ref={passwordRef}
         />
         {!loginMode && (
-          <input
+          <Input
             type="password"
             required
-            className="border"
             placeholder="Confirme a senha *"
             ref={passwordConfirmationRef}
           />
         )}
 
-        <button
+        <Button
           className="cursor-pointer"
           type="submit"
           onClick={loginMode ? handleLogin : handleRegister}
+          color="#000"
         >
           {loginMode ? "Logar-se" : "Confirmar cadastro"}
-        </button>
+        </Button>
       </div>
 
       {loginMode && (
-        <button className="cursor-pointer" onClick={() => setLoginMode(false)}>
+        <Button
+          className="cursor-pointer"
+          onClick={() => setLoginMode(false)}
+          variant="link"
+        >
           Registrar-se
-        </button>
+        </Button>
       )}
 
       {!loginMode && (
-        <button className="cursor-pointer" onClick={() => setLoginMode(true)}>
+        <Button
+          className="cursor-pointer"
+          onClick={() => setLoginMode(true)}
+          variant="link"
+        >
           Cancelar
-        </button>
+        </Button>
       )}
     </div>
   );

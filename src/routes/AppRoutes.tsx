@@ -5,6 +5,8 @@ import Recommendations from "../pages/Recommendations";
 import { useState, useEffect } from "react";
 import { FIREBASE_AUTH } from "../utils/firebaseConfig";
 import { onAuthStateChanged, User } from "firebase/auth";
+import AddRecommendation from "../pages/AddRecommendation";
+import MyRecommendations from "@/pages/MyRecommendations";
 
 const AppRoutes = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -25,6 +27,11 @@ const AppRoutes = () => {
           <>
             <Route path="*" element={<Home />} />
             <Route path="/recommendations" element={<Recommendations />} />
+            <Route
+              path="/recommendations/add"
+              element={<AddRecommendation />}
+            />
+            <Route path="/recommendations/my" element={<MyRecommendations />} />
           </>
         )}
       </Routes>

@@ -1,7 +1,8 @@
 import { RecommendationType } from "../../types/RecommendationType";
-import { FaBook } from "react-icons/fa";
-import { MdMovie } from "react-icons/md";
-import { SiApplemusic } from "react-icons/si";
+import { Book } from "lucide-react";
+import { Clapperboard } from "lucide-react";
+import { Music } from "lucide-react";
+
 import {
   BOOK_ICON_COLOR,
   ICON_STYLES,
@@ -23,10 +24,7 @@ const RecommendationTypeCard = (props: RecommendationTypeCardProps) => {
     recommendationsQuantity !== 1 ? "recomendações" : "recomendação"
   }`;
 
-  const handleClick = () => {
-    localStorage.setItem("category", JSON.stringify(type));
-    navigate("/recommendations");
-  };
+  const handleClick = () => navigate(`/recommendations?type=${type}`);
 
   const typeLabel =
     type === RecommendationType.BOOK
@@ -41,11 +39,11 @@ const RecommendationTypeCard = (props: RecommendationTypeCardProps) => {
       onClick={handleClick}
     >
       {type === RecommendationType.BOOK ? (
-        <FaBook fill={BOOK_ICON_COLOR} className={ICON_STYLES} />
+        <Book color={BOOK_ICON_COLOR} className={ICON_STYLES} />
       ) : type === RecommendationType.MOVIE ? (
-        <MdMovie fill={MOVIE_ICON_COLOR} className={ICON_STYLES} />
+        <Clapperboard color={MOVIE_ICON_COLOR} className={ICON_STYLES} />
       ) : (
-        <SiApplemusic fill={SONG_ICON_COLOR} className={ICON_STYLES} />
+        <Music color={SONG_ICON_COLOR} className={ICON_STYLES} />
       )}
 
       <div>

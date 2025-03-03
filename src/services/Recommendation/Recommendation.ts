@@ -5,10 +5,19 @@ export type Recommendation = {
   id: string;
   type: RecommendationType;
   title: string;
-  userNickname: string;
+  username: string;
   userId: string;
   rating: number;
   psychologicalConcept: PsychologicalConcept;
   psychologicalImpact: string;
   createdAt: Date;
+};
+
+export type NewRecommendationDTO = {
+  type: RecommendationType;
+  title: string;
+  username: string;
+  userId: string;
+  psychologicalConcept: PsychologicalConcept;
+  psychologicalImpact: string;
 };
