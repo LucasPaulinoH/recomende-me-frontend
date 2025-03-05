@@ -1,43 +1,31 @@
 import RecommendationTypeCard from "../../components/RecommendationTypeCard";
-import { PAGE_CONTAINER } from "../../styles/shared";
+import { LoggedContainer } from "../../styles/shared";
 import { RecommendationType } from "../../types/RecommendationType";
 import useFetchRecommendationsQuantity from "../../hooks/useFetchRecommendationsQuantity";
-import SignOutButton from "../../components/SignOutButton.tsx";
-import { FIREBASE_AUTH } from "../../utils/firebaseConfig.ts";
+import { LOADING_LABEL } from "@/utils/stringUtils.ts";
 
 const Home = () => {
   const { recommendationsQuantity } = useFetchRecommendationsQuantity();
 
-  const { currentUser } = FIREBASE_AUTH;
-
   return (
-    <div className={PAGE_CONTAINER}>
-      <div>
-        {`Bem-vindo, ${currentUser?.displayName}!`} <SignOutButton />
-      </div>
+    <LoggedContainer>
       <h1 className="font-bold">Selecione uma categoria</h1>
 
-      <div className="flex gap-20">
+      <div className="w-full flex flex-col items-center justify-center gap-10 md:flex-row pl-8 pr-8">
         <RecommendationTypeCard
           type={RecommendationType.BOOK}
-          recommendationsQuantity={
-            recommendationsQuantity[0] ?? "Carregando..."
-          }
+          recommendationsQuantity={recommendationsQuantity[0] ?? LOADING_LABEL}
         />
         <RecommendationTypeCard
           type={RecommendationType.MOVIE}
-          recommendationsQuantity={
-            recommendationsQuantity[1] ?? "Carregando..."
-          }
+          recommendationsQuantity={recommendationsQuantity[1] ?? LOADING_LABEL}
         />
         <RecommendationTypeCard
           type={RecommendationType.SONG}
-          recommendationsQuantity={
-            recommendationsQuantity[2] ?? "Carregando..."
-          }
+          recommendationsQuantity={recommendationsQuantity[2] ?? LOADING_LABEL}
         />
       </div>
-    </div>
+    </LoggedContainer>
   );
 };
 

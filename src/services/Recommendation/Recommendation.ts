@@ -6,8 +6,10 @@ export type Recommendation = {
   type: RecommendationType;
   title: string;
   username: string;
+  cover: string;
+  authors: string[];
   userId: string;
-  rating: number;
+  ratings: string[];
   psychologicalConcept: PsychologicalConcept;
   psychologicalImpact: string;
   createdAt: Date;
@@ -16,6 +18,8 @@ export type Recommendation = {
 export type NewRecommendationDTO = {
   type: RecommendationType;
   title: string;
+  cover: string;
+  authors: string[];
   username: string;
   userId: string;
   psychologicalConcept: PsychologicalConcept;

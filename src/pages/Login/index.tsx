@@ -1,124 +1,50 @@
-import { useRef, useState } from "react";
-import { PAGE_CONTAINER } from "../../styles/shared";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
-import { FIREBASE_AUTH } from "../../utils/firebaseConfig";
+import { useRef } from "react";
+import { UNLOGGED_CONTAINER } from "../../styles/shared";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { handleLogin } from "./functions";
+import { useNavigate } from "react-router-dom";
 
-// TODO: refactor completely
 const Login = () => {
-  localStorage.clear();
+  const navigate = useNavigate();
 
-  const usernameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const passwordConfirmationRef = useRef<HTMLInputElement>(null);
-
-  const [loginMode, setLoginMode] = useState(true);
-
-  const handleLogin = async (e: any) => {
-    e.preventDefault();
-
-    if (!emailRef.current || !passwordRef.current) return;
-
-    try {
-      await signInWithEmailAndPassword(
-        FIREBASE_AUTH,
-        emailRef.current.value,
-        passwordRef.current.value
-      );
-    } catch (error) {
-      alert("Erro no login: " + error);
-    }
-  };
-
-  const handleRegister = async (e: any) => {
-    e.preventDefault();
-    if (
-      !emailRef.current ||
-      !passwordRef.current ||
-      !passwordConfirmationRef.current
-    )
-      return;
-
-    try {
-      const registerResponse = await createUserWithEmailAndPassword(
-        FIREBASE_AUTH,
-        emailRef.current.value,
-        passwordRef.current.value
-      );
-
-      await updateProfile(registerResponse.user, {
-        displayName: usernameRef?.current?.value,
-      });
-
-      alert("Account successfully created!");
-    } catch (error) {
-      alert("Registration failed: " + error);
-    }
-  };
 
   return (
-    <div className={PAGE_CONTAINER}>
-      <div className="flex flex-col gap-10">
-        {!loginMode && (
-          <Input
-            type="text"
-            required
-            placeholder="Nome de usuário *"
-            ref={usernameRef}
-          />
-        )}
-        
-        <Input type="text" required placeholder="Email *" ref={emailRef} />
-        <Input
-          type="password"
-          required
-          placeholder="Senha *"
-          ref={passwordRef}
-        />
-        {!loginMode && (
+    <div className={UNLOGGED_CONTAINER}>
+      <form
+        onSubmit={(e) =>
+          handleLogin(e, emailRef!.current!.value, passwordRef!.current!.value)
+        }
+        className="max-w-[400px] w-full flex flex-col gap-8 p-10"
+      >
+        <h1 className="font-bold self-center">RecomendeMe</h1>
+        <div className="flex flex-col gap-6">
+          <Input type="text" required placeholder="Email *" ref={emailRef} />
           <Input
             type="password"
             required
-            placeholder="Confirme a senha *"
-            ref={passwordConfirmationRef}
+            placeholder="Senha *"
+            ref={passwordRef}
           />
-        )}
 
-        <Button
-          className="cursor-pointer"
-          type="submit"
-          onClick={loginMode ? handleLogin : handleRegister}
-          color="#000"
-        >
-          {loginMode ? "Logar-se" : "Confirmar cadastro"}
-        </Button>
-      </div>
+          <Button type="submit" className="cursor-pointer">
+            Entrar
+          </Button>
+        </div>
 
-      {loginMode && (
-        <Button
-          className="cursor-pointer"
-          onClick={() => setLoginMode(false)}
-          variant="link"
-        >
-          Registrar-se
-        </Button>
-      )}
-
-      {!loginMode && (
-        <Button
-          className="cursor-pointer"
-          onClick={() => setLoginMode(true)}
-          variant="link"
-        >
-          Cancelar
-        </Button>
-      )}
+        <p className="self-center">
+          Não possui conta?
+          <Button
+            className="cursor-pointer p-0 pl-1"
+            variant="link"
+            onClick={() => navigate("/register")}
+          >
+            Registrar-se
+          </Button>
+        </p>
+      </form>
     </div>
   );
 };

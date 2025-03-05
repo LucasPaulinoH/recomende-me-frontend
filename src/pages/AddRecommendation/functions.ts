@@ -4,6 +4,8 @@ import { NewRecommendationDTO } from "@/services/Recommendation/Recommendation";
 export const handleAddRecommendation = async (
   newRecommendationDTO: NewRecommendationDTO
 ) => {
+  console.log(newRecommendationDTO);
+
   try {
     await recommendationApi.createRecommendation(newRecommendationDTO);
   } catch (error) {

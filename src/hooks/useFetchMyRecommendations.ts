@@ -27,7 +27,7 @@ const useFetchMyRecommendations = () => {
     fetchMyRecommendations();
   }, []);
 
-  return { myRecommendations };
+  return { myRecommendations, fetchMyRecommendations };
 };
 
 export default useFetchMyRecommendations;

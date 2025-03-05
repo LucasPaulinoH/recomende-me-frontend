@@ -7,6 +7,7 @@ import { FIREBASE_AUTH } from "../utils/firebaseConfig";
 import { onAuthStateChanged, User } from "firebase/auth";
 import AddRecommendation from "../pages/AddRecommendation";
 import MyRecommendations from "@/pages/MyRecommendations";
+import Register from "@/pages/Register";
 
 const AppRoutes = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -22,6 +23,7 @@ const AppRoutes = () => {
           <>
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </>
         ) : (
           <>

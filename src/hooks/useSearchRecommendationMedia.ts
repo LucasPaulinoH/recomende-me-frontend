@@ -1,39 +1,46 @@
 import booksApi from "@/services/booksApi";
 import { useEffect, useState } from "react";
 import { RecommendationType } from "@/types/RecommendationType";
+import Media from "@/types/SelectedMedia";
 
 const useSearchRecommendationMedia = (type: RecommendationType) => {
-  const [title, setTitle] = useState("");
+  const [search, setSearch] = useState("");
+  const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
   const [results, setResults] = useState([]);
 
   const fetchBookSearch = async () => {
-    if (title.length === 0) {
+    if (search.length === 0) {
       setResults([]);
       return;
     }
 
     try {
-      const res = await booksApi.searchBook(title.toLowerCase());
-      console.log(res);
+      const resultsResponse = await booksApi.searchBook(search.toLowerCase());
+      console.log(resultsResponse);
 
-      setResults(res);
+      setResults(resultsResponse);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    switch (type) {
-      case RecommendationType.BOOK:
-        fetchBookSearch();
-        break;
+    const delayDebounce = setTimeout(() => {
+      switch (type) {
+        case RecommendationType.BOOK:
+          fetchBookSearch();
+          break;
+        case RecommendationType.MOVIE:
+          break;
+        case RecommendationType.SONG:
+          break;
+      }
+    }, 450);
 
-      default:
-        break;
-    }
-  }, [title]);
+    return () => clearTimeout(delayDebounce);
+  }, [search, type]);
 
-  return { title, setTitle, results };
+  return { search, setSearch, results, selectedMedia, setSelectedMedia };
 };
 
 export default useSearchRecommendationMedia;
