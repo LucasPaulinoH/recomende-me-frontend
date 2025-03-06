@@ -28,6 +28,7 @@ const Recommendations = () => {
           </p>
         )}
       </div>
+
       {filteredRecommendations && filteredRecommendations?.length > 0 ? (
         <div className={RECOMMENDATIONS_CARD_GRID}>
           {filteredRecommendations?.map((recommendation) => (

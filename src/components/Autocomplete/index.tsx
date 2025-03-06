@@ -2,62 +2,74 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
 import { Input } from "../ui/input";
 import Media from "@/types/SelectedMedia";
+import useSelectedType from "@/hooks/useSelectedType";
+import { RecommendationType } from "@/types/RecommendationType";
+import { getHandledSelectedMedia, showAuthors } from "./functions";
 
 interface AutocompleteProps {
-  value: string;
-  setValue: Dispatch<SetStateAction<string>>;
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
   placeholder: string;
   results: any[];
-  setSelectedMedia: Dispatch<SetStateAction<Media>> ;
+  selectedMedia: Media | null;
+  setSelectedMedia: Dispatch<SetStateAction<Media | null>>;
 }
 
 const Autocomplete = (props: AutocompleteProps) => {
-  const { value, setValue, placeholder, results, setSelectedMedia } = props;
+  const { search, setSearch, placeholder, results, setSelectedMedia } = props;
   const [isOpen, setIsOpen] = useState(false);
+
+  const { selectedType } = useSelectedType();
 
   return (
     <Command>
       <Input
-        value={value}
+        value={search}
         onChange={(e) => {
-          setValue(e.target.value);
+          setSearch(e.target.value);
           setIsOpen(!!e.target.value);
         }}
         placeholder={placeholder}
         onFocus={() => setIsOpen(true)}
         onBlur={() => setTimeout(() => setIsOpen(false), 200)}
       />
+
       {isOpen && (
         <CommandList className="border">
           <CommandGroup>
             {results &&
-              results.map((result, index) => (
-                <CommandItem
-                  key={index}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue.split("Autor:")[0]);
-                    setIsOpen(false);
-                    setSelectedMedia({
-                      title: result?.volumeInfo?.title,
-                      authors: result?.volumeInfo?.authors ?? ["Desconhecido"],
-                      cover: result?.volumeInfo?.imageLinks?.thumbnail ?? "",
-                    } as Media);
-                  }}
-                >
-                  <img src={result?.volumeInfo?.imageLinks?.smallThumbnail} loading="lazy"/>
-                  <div>
-                    <p className="font-bold p-0">{result?.volumeInfo?.title}</p>
-                    <p>
-                      {`Autor: ${
-                        result?.volumeInfo?.authors
-                          ? result?.volumeInfo?.authors[0] ||
-                            result?.volumeInfo?.authors[1]
-                          : "Desconhecido"
-                      }`}
-                    </p>
-                  </div>
-                </CommandItem>
-              ))}
+              results?.map((result, index) => {
+                const handledMedia = getHandledSelectedMedia(
+                  result,
+                  selectedType
+                );
+
+                return (
+                  <CommandItem
+                    key={index}
+                    onSelect={() => {
+                      setSearch(handledMedia.title);
+                      setSelectedMedia(handledMedia);
+                      setIsOpen(false);
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <img
+                      src={handledMedia.cover}
+                      className="max-h-[100px]"
+                      loading="lazy"
+                    />
+                    <div>
+                      <p className="font-bold p-0">{handledMedia.title}</p>
+
+                      {(selectedType === RecommendationType.BOOK ||
+                        selectedType === RecommendationType.SONG) && (
+                        <p>{showAuthors(handledMedia.authors)}</p>
+                      )}
+                    </div>
+                  </CommandItem>
+                );
+              })}
           </CommandGroup>
         </CommandList>
       )}

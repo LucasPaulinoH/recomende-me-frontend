@@ -6,16 +6,20 @@ import { handleDeleteRecommendation, handleUpdateRating } from "./functions";
 import { FIREBASE_AUTH } from "@/utils/firebaseConfig";
 import { Heart } from "lucide-react";
 import { useState } from "react";
+import { RecommendationType } from "@/types/RecommendationType";
+import RecommendationTypeBadge from "../RecommendationTypeBadge";
 
 interface RecommendationCardProps {
   recommendation: Recommendation;
   hideRecommendedBy?: boolean;
   editMode?: boolean;
   refetch?: VoidFunction;
+  showTypeCard?: boolean;
 }
 
 const RecommendationCard = (props: RecommendationCardProps) => {
-  const { recommendation, hideRecommendedBy, editMode, refetch } = props;
+  const { recommendation, hideRecommendedBy, editMode, refetch, showTypeCard } =
+    props;
 
   const [recommendationRatings, setRecommendationRatings] = useState(
     recommendation.ratings
@@ -28,7 +32,7 @@ const RecommendationCard = (props: RecommendationCardProps) => {
   const hasUserRated = () => recommendationRatings.includes(currentUser!.uid);
 
   return (
-    <div className="flex flex-col gap-5 cursor-pointer hover:scale-110 transition-all">
+    <div className="flex flex-col gap-5 cursor-pointer hover:scale-105 transition-all">
       {editMode && (
         <Button
           className="cursor-pointer"
@@ -50,43 +54,48 @@ const RecommendationCard = (props: RecommendationCardProps) => {
         loading="lazy"
       />
 
-      <div>
+      <div className="flex flex-col gap-2 text-justify">
         <h1 className="font-bold">{recommendation.title}</h1>
-        <p>
-          {hasMoreThanAnAuthor(recommendation.authors)
-            ? "Autores: "
-            : "Autor: "}
-          {recommendation.authors}
-        </p>
+        {showTypeCard && <RecommendationTypeBadge type={recommendation.type} />}
+
+        {/* {recommendation.type !== RecommendationType.MOVIE && (
+          <p>
+            {hasMoreThanAnAuthor(recommendation.authors)
+              ? "Autores: "
+              : "Autor: "}
+            {recommendation.authors}
+          </p>
+        )}*/}
         {!hideRecommendedBy && (
           <p>{`Recomendado por: ${recommendation.username}`}</p>
         )}
+
         <p>{`Conceito psicológico: ${
           PsychologicalConcept[
             // @ts-expect-error expecting any type
             recommendation.psychologicalConcept as keyof typeof PsychologicalConcept
           ]
         }`}</p>
-      </div>
 
-      {recommendation.userId !== currentUser?.uid ? (
-        <Button
-          className="cursor-pointer"
-          onClick={() =>
-            handleUpdateRating(recommendation.id, currentUser!.uid).then(
-              (ratingsResponse) => setRecommendationRatings(ratingsResponse!)
-            )
-          }
-        >
-          <Heart className={hasUserRated() ? "fill-[#fff]" : ""} />
-          {recommendationRatings.length}
-        </Button>
-      ) : (
-        <Button variant="ghost">
-          <Heart />
-          {recommendationRatings.length}
-        </Button>
-      )}
+        {recommendation.userId !== currentUser?.uid ? (
+          <Button
+            className="cursor-pointer"
+            onClick={() =>
+              handleUpdateRating(recommendation.id, currentUser!.uid).then(
+                (ratingsResponse) => setRecommendationRatings(ratingsResponse!)
+              )
+            }
+          >
+            <Heart className={hasUserRated() ? "fill-[#fff]" : ""} />
+            {recommendationRatings.length}
+          </Button>
+        ) : (
+          <Button variant="ghost">
+            <Heart />
+            {recommendationRatings.length}
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

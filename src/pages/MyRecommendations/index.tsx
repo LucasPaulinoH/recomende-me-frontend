@@ -39,6 +39,7 @@ const MyRecommendations = () => {
                 hideRecommendedBy
                 editMode
                 refetch={fetchMyRecommendations}
+                showTypeCard
               />
             ))}
           </div>

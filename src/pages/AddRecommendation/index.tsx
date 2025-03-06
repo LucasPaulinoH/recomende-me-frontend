@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { LoggedContainer, UNLOGGED_CONTAINER } from "../../styles/shared";
+import { LoggedContainer } from "../../styles/shared";
 import { FIREBASE_AUTH } from "../../utils/firebaseConfig";
 import useSelectedType from "@/hooks/useSelectedType";
 import { showTypeLabel } from "@/utils/stringUtils";
@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import useSearchRecommendationMedia from "@/hooks/useSearchRecommendationMedia";
 import Autocomplete from "@/components/Autocomplete";
 import { Plus } from "lucide-react";
+import Media from "@/types/SelectedMedia";
 
 const AddRecommendation = () => {
   const navigate = useNavigate();
@@ -30,8 +31,11 @@ const AddRecommendation = () => {
   const { currentUser } = FIREBASE_AUTH;
   const { selectedType } = useSelectedType();
 
-  const { search, setSearch, results, selectedMedia, setSelectedMedia } =
-    useSearchRecommendationMedia(selectedType);
+  const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
+
+  const [search, setSearch] = useState("");
+
+  const { results } = useSearchRecommendationMedia(selectedType, search);
 
   const handleAddRecommendationClick = async () => {
     if (!psychologicalConcept || search.replace(" ", "").length === 0) return;
@@ -56,10 +60,11 @@ const AddRecommendation = () => {
         </h1>
         <div className="max-w-[400px] w-full flex flex-col gap-5 p-10">
           <Autocomplete
-            value={search}
-            setValue={setSearch}
-            placeholder="Livro..."
+            search={search}
+            setSearch={setSearch}
+            placeholder="Busca..."
             results={results}
+            selectedMedia={selectedMedia}
             setSelectedMedia={setSelectedMedia}
           />
 
