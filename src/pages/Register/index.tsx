@@ -25,7 +25,7 @@ const Register = () => {
         }
         className="max-w-[400px] w-full flex flex-col gap-8 p-10"
       >
-        <h1 className="font-bold self-center">
+        <h1 className="font-bold self-center text-xl">
           Preencha os campos de cadastro
         </h1>
         <div className="flex flex-col gap-6">

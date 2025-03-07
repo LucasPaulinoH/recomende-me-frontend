@@ -5,40 +5,68 @@ import Media from "@/types/SelectedMedia";
 import useSelectedType from "@/hooks/useSelectedType";
 import { RecommendationType } from "@/types/RecommendationType";
 import { getHandledSelectedMedia, showAuthors } from "./functions";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { ChevronsUpDown } from "lucide-react";
+import { showTypeLabel } from "@/utils/stringUtils";
+import unknownCover from "@/assets/unknown-cover.png"
 
 interface AutocompleteProps {
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
-  placeholder: string;
   results: any[];
   selectedMedia: Media | null;
   setSelectedMedia: Dispatch<SetStateAction<Media | null>>;
 }
 
 const Autocomplete = (props: AutocompleteProps) => {
-  const { search, setSearch, placeholder, results, setSelectedMedia } = props;
+  const { search, setSearch, results, selectedMedia, setSelectedMedia } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const { selectedType } = useSelectedType();
 
   return (
-    <Command>
-      <Input
-        value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          setIsOpen(!!e.target.value);
-        }}
-        placeholder={placeholder}
-        onFocus={() => setIsOpen(true)}
-        onBlur={() => setTimeout(() => setIsOpen(false), 200)}
-      />
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <div
+          role="combobox"
+          aria-expanded={isOpen}
+          className="flex flex-row items-center rounded-[10px] gap-4 border justify-between cursor-pointer p-5"
+        >
+          {selectedMedia ? (
+            <div className="max-w-full flex gap-4 items-center">
+              <img
+                src={selectedMedia.cover || unknownCover}
+                alt={`${selectedMedia.cover} cover`}
+                className="w-[60px]"
+              />
+              <div className="flex flex-col items-start">
+                <p className="font-bold">{selectedMedia.title}</p>
+                <p>{showAuthors(selectedMedia.authors)}</p>
+              </div>
+            </div>
+          ) : (
+            `Buscar ${showTypeLabel(selectedType).toLowerCase()}`
+          )}
 
-      {isOpen && (
-        <CommandList className="border">
-          <CommandGroup>
-            {results &&
-              results?.map((result, index) => {
+          <ChevronsUpDown className="opacity-50" />
+        </div>
+      </PopoverTrigger>
+      <PopoverContent>
+        <Command>
+          <Input
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            placeholder={`${showTypeLabel(selectedType)
+              .toLowerCase()
+              .replace(/^./, (char) => char.toUpperCase())}...`}
+            aria-expanded={isOpen}
+          />
+
+          <CommandList>
+            <CommandGroup>
+              {results?.map((result, index) => {
                 const handledMedia = getHandledSelectedMedia(
                   result,
                   selectedType
@@ -70,10 +98,11 @@ const Autocomplete = (props: AutocompleteProps) => {
                   </CommandItem>
                 );
               })}
-          </CommandGroup>
-        </CommandList>
-      )}
-    </Command>
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 };
 

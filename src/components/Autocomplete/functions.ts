@@ -14,21 +14,21 @@ export const getHandledSelectedMedia = (
       selectedMedia = {
         title: result?.volumeInfo?.title,
         authors: result?.volumeInfo?.authors ?? ["Desconhecido"],
-        cover: result?.volumeInfo?.imageLinks?.thumbnail ?? "",
+        cover: result?.volumeInfo?.imageLinks?.thumbnail || "",
       };
       break;
     case RecommendationType.MOVIE:
       selectedMedia = {
         title: result?.title,
         authors: [],
-        cover: `${MOVIE_POSTER_URL_RADICAL}${result?.poster_path}`,
+        cover: `${MOVIE_POSTER_URL_RADICAL}${result?.poster_path}` || "",
       };
       break;
     case RecommendationType.SONG:
       selectedMedia = {
         title: result?.name,
         authors: [result?.artist],
-        cover: "",
+        cover: result?.image[3]["#text"] || "",
       };
       break;
   }

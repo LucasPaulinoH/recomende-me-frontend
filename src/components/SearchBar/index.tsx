@@ -20,20 +20,18 @@ const SearchBar = (props: SearchBarProps) => {
     navigate(`/recommendations/add?type=${selectedType}`);
 
   return (
-   
-      <div className="w-[99vw] flex content-start items-center  justify-center gap-2 pl-8 pr-8">
-        <Input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Busque recomendação..."
-          className="min-w-[40%] max-w-[400px]"
-        />
-        <Button className="cursor-pointer" onClick={handleAddClick}>
-          <Plus /> <p className="hidden sm:block">Nova recomendação</p>
-        </Button>
-      </div>
-    
+    <div className="w-[99vw] flex content-start items-center  justify-center gap-2 pl-8 pr-8">
+      <Input
+        type="text"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Busque recomendação..."
+        className="min-w-[40%] max-w-[400px]"
+      />
+      <Button className="cursor-pointer" onClick={handleAddClick}>
+        <Plus /> <p className="hidden sm:block">Nova recomendação</p>
+      </Button>
+    </div>
   );
 };
 

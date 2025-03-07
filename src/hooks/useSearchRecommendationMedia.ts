@@ -32,7 +32,7 @@ const useSearchRecommendationMedia = (
   const fetchSongSearch = async () => {
     try {
       const resultsResponse = await songsApi.searchSong(search);
-      setResults(resultsResponse.results.trackmatches.track);
+      setResults(resultsResponse.results.albummatches.album);
     } catch (error) {
       console.error(error);
     }

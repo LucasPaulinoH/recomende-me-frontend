@@ -15,11 +15,11 @@ const Login = () => {
     <div className={UNLOGGED_CONTAINER}>
       <form
         onSubmit={(e) =>
-          handleLogin(e, emailRef!.current!.value, passwordRef!.current!.value)
+          handleLogin(e, emailRef!.current!.value, passwordRef!.current!.value).then(() => navigate("/"))
         }
         className="max-w-[400px] w-full flex flex-col gap-8 p-10"
       >
-        <h1 className="font-bold self-center">RecomendeMe</h1>
+        <h1 className="font-bold self-center text-xl">RecomendeMe</h1>
         <div className="flex flex-col gap-6">
           <Input type="text" required placeholder="Email *" ref={emailRef} />
           <Input

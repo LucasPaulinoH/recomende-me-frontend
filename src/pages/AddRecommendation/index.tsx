@@ -18,8 +18,14 @@ import { NewRecommendationDTO } from "@/services/Recommendation/Recommendation";
 import { useNavigate } from "react-router-dom";
 import useSearchRecommendationMedia from "@/hooks/useSearchRecommendationMedia";
 import Autocomplete from "@/components/Autocomplete";
-import { Plus } from "lucide-react";
+import { Book, Clapperboard, Music, Plus } from "lucide-react";
 import Media from "@/types/SelectedMedia";
+import { RecommendationType } from "@/types/RecommendationType";
+import {
+  BOOK_ICON_COLOR,
+  MOVIE_ICON_COLOR,
+  SONG_ICON_COLOR,
+} from "@/components/RecommendationTypeCard/styles";
 
 const AddRecommendation = () => {
   const navigate = useNavigate();
@@ -54,15 +60,23 @@ const AddRecommendation = () => {
 
   return (
     <LoggedContainer>
-      <div className="flex flex-col items-center justify-center ">
-        <h1 className="font-bold">
-          Nova recomendação de {showTypeLabel(selectedType).toLowerCase()}
-        </h1>
+      <div className="w-full flex flex-col items-center justify-center max-w-[400px]">
+        <div className="flex items-center gap-2">
+          {selectedType === RecommendationType.BOOK ? (
+            <Book color={BOOK_ICON_COLOR} />
+          ) : selectedType === RecommendationType.MOVIE ? (
+            <Clapperboard color={MOVIE_ICON_COLOR} />
+          ) : (
+            <Music color={SONG_ICON_COLOR} />
+          )}
+          <h1 className="font-bold">{`Nova recomendação de ${showTypeLabel(
+            selectedType
+          ).toLowerCase()}`}</h1>
+        </div>
         <div className="max-w-[400px] w-full flex flex-col gap-5 p-10">
           <Autocomplete
             search={search}
             setSearch={setSearch}
-            placeholder="Busca..."
             results={results}
             selectedMedia={selectedMedia}
             setSelectedMedia={setSelectedMedia}
@@ -73,7 +87,7 @@ const AddRecommendation = () => {
               setPsychologicalConcept(e)
             }
           >
-            <SelectTrigger className="w-[280px]">
+            <SelectTrigger>
               <SelectValue placeholder="Conceito psicológico *" />
             </SelectTrigger>
             <SelectContent>
@@ -86,9 +100,10 @@ const AddRecommendation = () => {
           </Select>
 
           <Textarea
-            className="border"
+            className="border max-h-[140px] "
             placeholder="Impacto psicológico *"
             ref={psychologicalImpactRef}
+            maxLength={255}
           />
 
           <Button

@@ -6,6 +6,7 @@ import {
 import RecommendationCard from "@/components/RecommendationCard";
 import SearchBar from "@/components/SearchBar";
 import { useState } from "react";
+import NotFound from "@/components/NotFound";
 
 const MyRecommendations = () => {
   const { myRecommendations, fetchMyRecommendations } =
@@ -30,8 +31,9 @@ const MyRecommendations = () => {
       </div>
 
       <div className="flex flex-col gap-10 w-full flex-1 items-center">
-        <h1 className="font-bold pl-8 self-start">Minhas recomendações</h1>
-        {filteredRecommendations && filteredRecommendations?.length > 0 ? (
+        <h1 className="font-bold text-lg">Minhas recomendações</h1>
+        {!filteredRecommendations ? null : filteredRecommendations?.length >
+          0 ? (
           <div className={RECOMMENDATIONS_CARD_GRID}>
             {filteredRecommendations?.map((recommendation) => (
               <RecommendationCard
@@ -44,7 +46,9 @@ const MyRecommendations = () => {
             ))}
           </div>
         ) : (
-          <div className=""></div>
+          <div className="w-full flex flex-col items-center justify-center mt-4">
+            <NotFound label="Nenhuma recomendação" />
+          </div>
         )}
       </div>
     </LoggedContainer>

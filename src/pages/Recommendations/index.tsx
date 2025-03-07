@@ -5,8 +5,21 @@ import {
   RECOMMENDATIONS_CARD_GRID,
 } from "../../styles/shared";
 import RecommendationCard from "@/components/RecommendationCard";
-import BackButton from "@/components/BackButton";
 import SearchBar from "@/components/SearchBar";
+
+import { Book } from "lucide-react";
+import { Clapperboard } from "lucide-react";
+import { Music } from "lucide-react";
+
+import { RecommendationType } from "@/types/RecommendationType";
+import useSelectedType from "@/hooks/useSelectedType";
+import {
+  BOOK_ICON_COLOR,
+  MOVIE_ICON_COLOR,
+  SONG_ICON_COLOR,
+} from "@/components/RecommendationTypeCard/styles";
+import { showTypeLabel } from "@/utils/stringUtils";
+import NotFound from "@/components/NotFound";
 
 const Recommendations = () => {
   const { recommendations } = useFetchRecommendations();
@@ -17,27 +30,47 @@ const Recommendations = () => {
     recommendation.title.toLowerCase().includes(search.toLowerCase())
   );
 
+  const { selectedType } = useSelectedType();
+
   return (
     <LoggedContainer>
       <div className="flex flex-col items-center gap-5">
         <SearchBar search={search} setSearch={setSearch} />
 
-        {search.length > 0 && (
+        {recommendations && recommendations.length > 0 && search.length > 0 && (
           <p className="font-bold">
             Resultados encontrados ({filteredRecommendations?.length}):{" "}
           </p>
         )}
       </div>
 
-      {filteredRecommendations && filteredRecommendations?.length > 0 ? (
-        <div className={RECOMMENDATIONS_CARD_GRID}>
-          {filteredRecommendations?.map((recommendation) => (
-            <RecommendationCard recommendation={recommendation} />
-          ))}
+      <div className="flex flex-col gap-10 w-full flex-1 items-center">
+        <div className="flex items-center gap-2">
+          {selectedType === RecommendationType.BOOK ? (
+            <Book color={BOOK_ICON_COLOR} />
+          ) : selectedType === RecommendationType.MOVIE ? (
+            <Clapperboard color={MOVIE_ICON_COLOR} />
+          ) : (
+            <Music color={SONG_ICON_COLOR} />
+          )}
+          <h1 className="font-bold text-lg">{`Recomendações de ${showTypeLabel(
+            selectedType
+          ).toLowerCase()}s`}</h1>
         </div>
-      ) : (
-        <div className="w-full flex-1"></div>
-      )}
+
+        {!filteredRecommendations ? null : filteredRecommendations?.length >
+          0 ? (
+          <div className={RECOMMENDATIONS_CARD_GRID}>
+            {filteredRecommendations?.map((recommendation) => (
+              <RecommendationCard recommendation={recommendation} />
+            ))}
+          </div>
+        ) : (
+          <div className="w-full flex flex-col items-center justify-center mt-4">
+            <NotFound label="Nenhum resultado encontrado"/>
+          </div>
+        )}
+      </div>
     </LoggedContainer>
   );
 };

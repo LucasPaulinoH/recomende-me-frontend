@@ -7,7 +7,7 @@ const THE_MOVIE_DB_API_TOKEN =
 const moviesApi = {
   searchMovie: (search: string) =>
     axios
-      .get(`${CONTROLLER_URL}${search}&language=pt-BR`, {
+      .get(`${CONTROLLER_URL}${search}&limit=15&language=pt-BR`, {
         headers: {
           Authorization: `Bearer ${THE_MOVIE_DB_API_TOKEN}`,
         },
