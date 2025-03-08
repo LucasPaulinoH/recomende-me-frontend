@@ -10,6 +10,7 @@ import {
   SONG_ICON_COLOR,
 } from "./styles";
 import { useNavigate } from "react-router-dom";
+import { LOADING_LABEL } from "@/utils/stringUtils";
 
 interface RecommendationTypeCardProps {
   type: RecommendationType;
@@ -48,7 +49,7 @@ const RecommendationTypeCard = (props: RecommendationTypeCardProps) => {
 
       <div>
         <h1 className="font-bold">{typeLabel}</h1>
-        <p>{recommendationsQuantityLabel}</p>
+        <p>{recommendationsQuantity ? recommendationsQuantityLabel : LOADING_LABEL}</p>
       </div>
     </div>
   );

@@ -7,4 +7,6 @@ export const showTypeLabel = (type: RecommendationType) =>
     ? "FILME"
     : "MÚSICA";
 
-export const LOADING_LABEL = "Carregando..."
+export const LOADING_LABEL = "Carregando...";
+
+export const LOADING_RECOMMENDATIONS_LABEL = "Carregando recomendações...";

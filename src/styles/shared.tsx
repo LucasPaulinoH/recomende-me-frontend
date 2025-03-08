@@ -10,7 +10,7 @@ export const LOGGED_CONTAINER =
 export const GENERAL_CONTAINER = " min-h-screen mb-20";
 
 export const RECOMMENDATIONS_CARD_GRID =
-  "flex-1 grid grid-cols-1 md:grid-cols-5 sm:grid-cols-2 gap-10 pl-8 pr-8";
+  "flex-1 grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-10 pl-8 pr-8";
 
 export const LoggedContainer = ({ children }: { children: ReactNode }) => (
   <div className={GENERAL_CONTAINER}>

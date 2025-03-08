@@ -18,8 +18,12 @@ import {
   MOVIE_ICON_COLOR,
   SONG_ICON_COLOR,
 } from "@/components/RecommendationTypeCard/styles";
-import { showTypeLabel } from "@/utils/stringUtils";
+import {
+  LOADING_RECOMMENDATIONS_LABEL,
+  showTypeLabel,
+} from "@/utils/stringUtils";
 import NotFound from "@/components/NotFound";
+import BackButton from "@/components/BackButton";
 
 const Recommendations = () => {
   const { recommendations } = useFetchRecommendations();
@@ -37,7 +41,7 @@ const Recommendations = () => {
   return (
     <LoggedContainer>
       <div className="flex flex-col items-center gap-5">
-        <SearchBar search={search} setSearch={setSearch} />
+        <div><SearchBar search={search} setSearch={setSearch} /></div>
 
         {recommendations && recommendations.size() > 0 && search.length > 0 && (
           <p className="font-bold">
@@ -60,14 +64,17 @@ const Recommendations = () => {
           ).toLowerCase()}s`}</h1>
         </div>
 
-        {!filteredRecommendations ? null : filteredRecommendations?.length >
-          0 ? (
+        {!filteredRecommendations ? (
+          <p>{LOADING_RECOMMENDATIONS_LABEL}</p>
+        ) : filteredRecommendations?.length > 0 ? (
           <div className={RECOMMENDATIONS_CARD_GRID}>
             {filteredRecommendations?.map((recommendation) => (
-              <RecommendationCard
-                recommendation={recommendation}
-                key={recommendation.id}
-              />
+              <div className="max-w-[300px]">
+                <RecommendationCard
+                  recommendation={recommendation}
+                  key={recommendation.id}
+                />
+              </div>
             ))}
           </div>
         ) : (

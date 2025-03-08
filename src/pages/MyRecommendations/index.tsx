@@ -7,6 +7,7 @@ import RecommendationCard from "@/components/RecommendationCard";
 import SearchBar from "@/components/SearchBar";
 import { useState } from "react";
 import NotFound from "@/components/NotFound";
+import { LOADING_RECOMMENDATIONS_LABEL } from "@/utils/stringUtils";
 
 const MyRecommendations = () => {
   const { myRecommendations, fetchMyRecommendations } =
@@ -34,17 +35,20 @@ const MyRecommendations = () => {
 
       <div className="flex flex-col gap-10 w-full flex-1 items-center">
         <h1 className="font-bold text-lg">Minhas recomendações</h1>
-        {!filteredRecommendations ? null : filteredRecommendations?.length >
+
+        {!filteredRecommendations ? <p>{LOADING_RECOMMENDATIONS_LABEL}</p> : filteredRecommendations?.length >
           0 ? (
           <div className={RECOMMENDATIONS_CARD_GRID}>
             {filteredRecommendations?.map((recommendation) => (
-              <RecommendationCard
-                recommendation={recommendation}
-                hideRecommendedBy
-                editMode
-                refetch={fetchMyRecommendations}
-                showTypeCard
-              />
+              <div className="max-w-[300px]">
+                <RecommendationCard
+                  recommendation={recommendation}
+                  hideRecommendedBy
+                  editMode
+                  refetch={fetchMyRecommendations}
+                  showTypeCard
+                />
+              </div>
             ))}
           </div>
         ) : (
@@ -53,6 +57,7 @@ const MyRecommendations = () => {
           </div>
         )}
       </div>
+      
     </LoggedContainer>
   );
 };

@@ -14,15 +14,15 @@ const Home = () => {
       <div className="w-full flex flex-col items-center justify-center gap-10 md:flex-row pl-8 pr-8">
         <RecommendationTypeCard
           type={RecommendationType.BOOK}
-          recommendationsQuantity={recommendationsQuantity[0] ?? LOADING_LABEL}
+          recommendationsQuantity={recommendationsQuantity[0]}
         />
         <RecommendationTypeCard
           type={RecommendationType.MOVIE}
-          recommendationsQuantity={recommendationsQuantity[1] ?? LOADING_LABEL}
+          recommendationsQuantity={recommendationsQuantity[1]}
         />
         <RecommendationTypeCard
           type={RecommendationType.SONG}
-          recommendationsQuantity={recommendationsQuantity[2] ?? LOADING_LABEL}
+          recommendationsQuantity={recommendationsQuantity[2]}
         />
       </div>
     </LoggedContainer>

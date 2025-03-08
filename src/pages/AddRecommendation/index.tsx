@@ -36,8 +36,6 @@ import { Form } from "@/components/ui/form";
 const AddRecommendation = () => {
   const navigate = useNavigate();
 
-  const psychologicalImpactRef = useRef<HTMLTextAreaElement>(null);
-
   const { currentUser } = FIREBASE_AUTH;
   const { selectedType } = useSelectedType();
 
@@ -47,7 +45,13 @@ const AddRecommendation = () => {
 
   const { results } = useSearchRecommendationMedia(selectedType, search);
 
+  const psychologicalImpactRef = useRef<HTMLTextAreaElement>(null);
+
+  const [addLoading, setAddLoading] = useState(false);
+
   const handleAddRecommendationClick = async () => {
+    setAddLoading(true);
+
     if (!selectedMedia) {
       alert(`É necessário selecionar ${showTypeLabel(selectedType)}`);
       return;
@@ -62,7 +66,9 @@ const AddRecommendation = () => {
       username: currentUser?.displayName,
       authors: selectedMedia?.authors,
       cover: selectedMedia?.cover,
-    } as NewRecommendationDTO).then(() => navigate(`/recommendations/my`));
+    } as NewRecommendationDTO)
+      .then(() => navigate(`/recommendations/my`))
+      .finally(() => setAddLoading(false));
   };
 
   const addRecommendationForm = useForm<
@@ -143,9 +149,19 @@ const AddRecommendation = () => {
               {(field) => <Textarea {...field} ref={psychologicalImpactRef} />}
             </FormInput>
 
-            <Button className="cursor-pointer" type="submit">
-              <Plus />
-              Adicionar recomendação
+            <Button
+              className="cursor-pointer"
+              type="submit"
+              disabled={addLoading}
+            >
+              {!addLoading ? (
+                <>
+                  <Plus />
+                  Adicionar recomendação
+                </>
+              ) : (
+                "Adicionando recomendação..."
+              )}
             </Button>
           </div>
         </form>
