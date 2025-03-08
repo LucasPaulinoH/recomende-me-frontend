@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Recommendation } from "../services/Recommendation/Recommendation";
 import recommendationApi from "../services/Recommendation";
 import { FIREBASE_AUTH } from "@/utils/firebaseConfig";
+import LinkedList, {
+  getRecommendationsListFromRecommendationsArray,
+} from "@/utils/data-structures/linkedList";
 
 const useFetchMyRecommendations = () => {
-  const [myRecommendations, setMyRecommendations] = useState<
-    Recommendation[] | null
-  >(null);
+  const [myRecommendations, setMyRecommendations] =
+    useState<LinkedList<Recommendation> | null>(null);
 
   const { currentUser } = FIREBASE_AUTH;
 
@@ -17,7 +19,9 @@ const useFetchMyRecommendations = () => {
           currentUser!.uid
         );
 
-      setMyRecommendations(recommendationsResponse);
+      setMyRecommendations(
+        getRecommendationsListFromRecommendationsArray(recommendationsResponse)
+      );
     } catch (error) {
       console.error(error);
     }

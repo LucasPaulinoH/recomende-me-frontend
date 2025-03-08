@@ -1,7 +1,5 @@
 import axios from "axios";
 
-//const CONTROLLER_URL = `https://www.googleapis.com/books/v1/volumes?q=`;
-
 const booksApi = {
   searchBook: (search: string) =>
     axios

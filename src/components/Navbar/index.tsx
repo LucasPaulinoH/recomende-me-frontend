@@ -44,7 +44,7 @@ const Navbar = () => {
         <DropdownMenuContent className="w-56">
           <DropdownMenuGroup>
             {navbarOptions.map((option, index) => (
-              <>
+              <div key={index}>
                 {index !== 0 && <DropdownMenuSeparator />}
                 <DropdownMenuItem
                   className={`cursor-pointer w-full self-start`}
@@ -53,7 +53,7 @@ const Navbar = () => {
                   {option.icon}
                   {option.label}
                 </DropdownMenuItem>
-              </>
+              </div>
             ))}
           </DropdownMenuGroup>
         </DropdownMenuContent>

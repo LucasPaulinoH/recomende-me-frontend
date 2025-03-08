@@ -26,9 +26,11 @@ const Recommendations = () => {
 
   const [search, setSearch] = useState("");
 
-  const filteredRecommendations = recommendations?.filter((recommendation) =>
-    recommendation.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredRecommendations = recommendations
+    ?.toArray()
+    .filter((recommendation) =>
+      recommendation.title.toLowerCase().includes(search.toLowerCase())
+    );
 
   const { selectedType } = useSelectedType();
 
@@ -37,7 +39,7 @@ const Recommendations = () => {
       <div className="flex flex-col items-center gap-5">
         <SearchBar search={search} setSearch={setSearch} />
 
-        {recommendations && recommendations.length > 0 && search.length > 0 && (
+        {recommendations && recommendations.size() > 0 && search.length > 0 && (
           <p className="font-bold">
             Resultados encontrados ({filteredRecommendations?.length}):{" "}
           </p>
@@ -62,12 +64,15 @@ const Recommendations = () => {
           0 ? (
           <div className={RECOMMENDATIONS_CARD_GRID}>
             {filteredRecommendations?.map((recommendation) => (
-              <RecommendationCard recommendation={recommendation} />
+              <RecommendationCard
+                recommendation={recommendation}
+                key={recommendation.id}
+              />
             ))}
           </div>
         ) : (
           <div className="w-full flex flex-col items-center justify-center mt-4">
-            <NotFound label="Nenhum resultado encontrado"/>
+            <NotFound label="Nenhum resultado encontrado" />
           </div>
         )}
       </div>

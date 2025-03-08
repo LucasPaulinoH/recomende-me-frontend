@@ -14,9 +14,11 @@ const MyRecommendations = () => {
 
   const [search, setSearch] = useState("");
 
-  const filteredRecommendations = myRecommendations?.filter((recommendation) =>
-    recommendation.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredRecommendations = myRecommendations
+    ?.toArray()
+    .filter((recommendation) =>
+      recommendation.title.toLowerCase().includes(search.toLowerCase())
+    );
 
   return (
     <LoggedContainer>
