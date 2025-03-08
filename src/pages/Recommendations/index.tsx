@@ -23,7 +23,6 @@ import {
   showTypeLabel,
 } from "@/utils/stringUtils";
 import NotFound from "@/components/NotFound";
-import BackButton from "@/components/BackButton";
 
 const Recommendations = () => {
   const { recommendations } = useFetchRecommendations();

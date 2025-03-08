@@ -2,7 +2,6 @@ import RecommendationTypeCard from "../../components/RecommendationTypeCard";
 import { LoggedContainer } from "../../styles/shared";
 import { RecommendationType } from "../../types/RecommendationType";
 import useFetchRecommendationsQuantity from "../../hooks/useFetchRecommendationsQuantity";
-import { LOADING_LABEL } from "@/utils/stringUtils.ts";
 
 const Home = () => {
   const { recommendationsQuantity } = useFetchRecommendationsQuantity();
