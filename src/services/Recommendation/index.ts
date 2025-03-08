@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_BASE_URL } from "../apiProvider";
+import { API_BASE_URL } from "../recommendationApiProvider";
 import { RecommendationType } from "../../types/RecommendationType";
 import { NewRecommendationDTO, Recommendation } from "./Recommendation";
 

@@ -4,6 +4,12 @@ import { UNLOGGED_CONTAINER } from "@/styles/shared";
 import { useRef } from "react";
 import { handleRegister } from "./functions";
 import { BackButtonContainer } from "@/components/BackButton";
+import { registerSchema } from "@/validation/loginAndRegisterSchemas";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "@/components/ui/form";
+import FormInput from "@/components/FormInput";
 
 const Register = () => {
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -11,49 +17,76 @@ const Register = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
+  const registerForm = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
   return (
     <div className={UNLOGGED_CONTAINER}>
       <BackButtonContainer />
-      <form
-        onSubmit={(e) =>
-          handleRegister(
-            e,
-            usernameRef!.current!.value,
-            emailRef!.current!.value,
-            passwordRef!.current!.value
-          )
-        }
-        className="max-w-[400px] w-full flex flex-col gap-8 p-10"
-      >
-        <h1 className="font-bold self-center text-xl">
-          Preencha os campos de cadastro
-        </h1>
-        <div className="flex flex-col gap-6">
-          <Input
-            type="text"
-            required
-            placeholder="Nome de usuário *"
-            ref={usernameRef}
-          />
-          <Input type="text" required placeholder="Email *" ref={emailRef} />
-          <Input
-            type="password"
-            required
-            placeholder="Senha *"
-            ref={passwordRef}
-          />
-          <Input
-            type="password"
-            required
-            placeholder="Confirme a senha *"
-            ref={confirmPasswordRef}
-          />
+      <Form {...registerForm}>
+        <form
+          onSubmit={registerForm.handleSubmit(() =>
+            handleRegister(
+              usernameRef!.current!.value,
+              emailRef!.current!.value,
+              passwordRef!.current!.value
+            )
+          )}
+          className="max-w-[400px] w-full flex flex-col gap-8 p-10"
+        >
+          <h1 className="font-bold self-center text-xl">
+            Preencha os campos de cadastro
+          </h1>
+          <div className="flex flex-col gap-6">
+            <FormInput
+              control={registerForm.control}
+              name="username"
+              label="Nome de usuário *"
+            >
+              {(field) => <Input {...field} ref={usernameRef} />}
+            </FormInput>
 
-          <Button className="cursor-pointer" type="submit">
-            Registrar-se
-          </Button>
-        </div>
-      </form>
+            <FormInput
+              control={registerForm.control}
+              name="email"
+              label="Email *"
+            >
+              {(field) => <Input {...field} ref={emailRef} />}
+            </FormInput>
+
+            <FormInput
+              control={registerForm.control}
+              name="password"
+              label="Senha *"
+            >
+              {(field) => (
+                <Input {...field} type="password" ref={passwordRef} />
+              )}
+            </FormInput>
+
+            <FormInput
+              control={registerForm.control}
+              name="confirmPassword"
+              label="Confirme sua senha *"
+            >
+              {(field) => (
+                <Input {...field} type="password" ref={confirmPasswordRef} />
+              )}
+            </FormInput>
+
+            <Button className="cursor-pointer" type="submit">
+              Registrar-se
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };

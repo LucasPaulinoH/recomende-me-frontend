@@ -26,12 +26,16 @@ import {
   MOVIE_ICON_COLOR,
   SONG_ICON_COLOR,
 } from "@/components/RecommendationTypeCard/styles";
+import addRecommendationSchema from "@/validation/addRecommendationSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import FormInput from "@/components/FormInput";
+import { Form } from "@/components/ui/form";
 
 const AddRecommendation = () => {
   const navigate = useNavigate();
 
-  const [psychologicalConcept, setPsychologicalConcept] =
-    useState<PsychologicalConcept>();
   const psychologicalImpactRef = useRef<HTMLTextAreaElement>(null);
 
   const { currentUser } = FIREBASE_AUTH;
@@ -44,7 +48,10 @@ const AddRecommendation = () => {
   const { results } = useSearchRecommendationMedia(selectedType, search);
 
   const handleAddRecommendationClick = async () => {
-    if (!psychologicalConcept || search.replace(" ", "").length === 0) return;
+    if (!selectedMedia) {
+      alert(`É necessário selecionar ${showTypeLabel(selectedType)}`);
+      return;
+    }
 
     handleAddRecommendation({
       title: selectedMedia?.title,
@@ -58,64 +65,91 @@ const AddRecommendation = () => {
     } as NewRecommendationDTO).then(() => navigate(`/recommendations/my`));
   };
 
+  const addRecommendationForm = useForm<
+    z.infer<typeof addRecommendationSchema>
+  >({
+    resolver: zodResolver(addRecommendationSchema),
+    defaultValues: {
+      psychologicalImpact: "",
+      psychologicalConcept: undefined,
+    },
+  });
+
+  const psychologicalConcept = addRecommendationForm.watch(
+    "psychologicalConcept"
+  );
+
   return (
     <LoggedContainer>
-      <div className="w-full flex flex-col items-center justify-center max-w-[400px]">
-        <div className="flex items-center gap-2">
-          {selectedType === RecommendationType.BOOK ? (
-            <Book color={BOOK_ICON_COLOR} />
-          ) : selectedType === RecommendationType.MOVIE ? (
-            <Clapperboard color={MOVIE_ICON_COLOR} />
-          ) : (
-            <Music color={SONG_ICON_COLOR} />
+      <Form {...addRecommendationForm}>
+        <form
+          className="w-full flex flex-col items-center justify-center max-w-[400px]"
+          onSubmit={addRecommendationForm.handleSubmit(
+            handleAddRecommendationClick
           )}
-          <h1 className="font-bold">{`Nova recomendação de ${showTypeLabel(
-            selectedType
-          ).toLowerCase()}`}</h1>
-        </div>
-        <div className="max-w-[400px] w-full flex flex-col gap-5 p-10">
-          <Autocomplete
-            search={search}
-            setSearch={setSearch}
-            results={results}
-            selectedMedia={selectedMedia}
-            setSelectedMedia={setSelectedMedia}
-          />
+        >
+          <div className="flex items-center gap-2">
+            {selectedType === RecommendationType.BOOK ? (
+              <Book color={BOOK_ICON_COLOR} />
+            ) : selectedType === RecommendationType.MOVIE ? (
+              <Clapperboard color={MOVIE_ICON_COLOR} />
+            ) : (
+              <Music color={SONG_ICON_COLOR} />
+            )}
+            <h1 className="font-bold">{`Nova recomendação de ${showTypeLabel(
+              selectedType
+            ).toLowerCase()}`}</h1>
+          </div>
+          <div className="max-w-[400px] w-full flex flex-col gap-5 p-10">
+            <Autocomplete
+              search={search}
+              setSearch={setSearch}
+              results={results}
+              selectedMedia={selectedMedia}
+              setSelectedMedia={setSelectedMedia}
+            />
 
-          <Select
-            onValueChange={(e: PsychologicalConcept) =>
-              setPsychologicalConcept(e)
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Conceito psicológico *" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.entries(PsychologicalConcept).map(([key, value]) => (
-                <SelectItem key={key} value={key}>
-                  {value}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <FormInput
+              control={addRecommendationForm.control}
+              name="psychologicalConcept"
+              label="Conceito psicológico *"
+            >
+              {(field) => (
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Conceito psicológico *" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(PsychologicalConcept).map(
+                      ([key, value]) => (
+                        <SelectItem key={key} value={key}>
+                          {value}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+              )}
+            </FormInput>
 
-          <Textarea
-            className="border max-h-[140px] "
-            placeholder="Impacto psicológico *"
-            ref={psychologicalImpactRef}
-            maxLength={255}
-          />
+            <FormInput
+              control={addRecommendationForm.control}
+              name="psychologicalImpact"
+              label="Impacto psicológico *"
+            >
+              {(field) => <Textarea {...field} ref={psychologicalImpactRef} />}
+            </FormInput>
 
-          <Button
-            className="cursor-pointer"
-            type="submit"
-            onClick={handleAddRecommendationClick}
-          >
-            <Plus />
-            Adicionar recomendação
-          </Button>
-        </div>
-      </div>
+            <Button className="cursor-pointer" type="submit">
+              <Plus />
+              Adicionar recomendação
+            </Button>
+          </div>
+        </form>
+      </Form>
     </LoggedContainer>
   );
 };
