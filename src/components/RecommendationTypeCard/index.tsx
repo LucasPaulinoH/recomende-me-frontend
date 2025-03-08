@@ -49,7 +49,7 @@ const RecommendationTypeCard = (props: RecommendationTypeCardProps) => {
 
       <div>
         <h1 className="font-bold">{typeLabel}</h1>
-        <p>{recommendationsQuantity ? recommendationsQuantityLabel : LOADING_LABEL}</p>
+        <p>{recommendationsQuantity !== undefined ? recommendationsQuantityLabel : LOADING_LABEL}</p>
       </div>
     </div>
   );
