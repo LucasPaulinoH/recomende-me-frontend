@@ -12,13 +12,12 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
 import { PsychologicalConcept } from "@/types/PsychologicalConcept";
-import unknownCover from "@/assets/unknown-cover.png"
+import unknownCover from "@/assets/unknown-cover.png";
 
 interface RecommendationCardProps {
   recommendation: Recommendation;
@@ -138,6 +137,8 @@ const RecommendationCard = (props: RecommendationCardProps) => {
           <div className="w-[50%] flex flex-col gap-2">
             <div>
               <p className="text-sm font-bold">Conceito psicológico</p>
+              
+              {/* @ts-ignore */}
               <p>{PsychologicalConcept[recommendation.psychologicalConcept]}</p>
             </div>
 
@@ -147,7 +148,7 @@ const RecommendationCard = (props: RecommendationCardProps) => {
             </div>
 
             {!hideRecommendedBy && (
-              <p className="text-sm my-4">{`Recomendado por ${
+              <p className="text-sm mt-4">{`Recomendado por ${
                 isRecommendationFromCurrentUser()
                   ? "você"
                   : recommendation.username
