@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { UNLOGGED_CONTAINER_STYLES } from "../../styles/shared";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { handleLogin } from "./functions";
@@ -10,6 +9,7 @@ import { loginSchema } from "@/validation/loginAndRegisterSchemas";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import FormInput from "@/components/FormInput";
+import { UNLOGGED_CONTAINER_STYLES } from "@/styles/shared";
 
 const Login = () => {
   const navigate = useNavigate();

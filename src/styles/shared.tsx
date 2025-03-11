@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import { ReactNode } from "react";
 
-export const UNLOGGED_CONTAINER =
+export const UNLOGGED_CONTAINER_STYLES =
   "w-screen min-h-screen flex flex-col items-center justify-center gap-20";
 
 export const LOGGED_CONTAINER =
