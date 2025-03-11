@@ -10,7 +10,7 @@ const Home = () => {
     <LoggedContainer>
       <h1 className="font-bold">Selecione uma categoria</h1>
 
-      <div className="w-full flex flex-col items-center justify-center gap-10 md:flex-row pl-8 pr-8">
+      <div className="w-full flex flex-col items-center justify-center gap-8 md:flex-row px-8 8">
         <RecommendationTypeCard
           type={RecommendationType.BOOK}
           recommendationsQuantity={recommendationsQuantity[0]}

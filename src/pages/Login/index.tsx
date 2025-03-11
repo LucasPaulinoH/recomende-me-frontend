@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { UNLOGGED_CONTAINER } from "../../styles/shared";
+import { UNLOGGED_CONTAINER_STYLES } from "../../styles/shared";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { handleLogin } from "./functions";
@@ -8,9 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/validation/loginAndRegisterSchemas";
 import { z } from "zod";
-import {
-  Form,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import FormInput from "@/components/FormInput";
 
 const Login = () => {
@@ -28,7 +26,7 @@ const Login = () => {
   });
 
   return (
-    <div className={UNLOGGED_CONTAINER}>
+    <div className={UNLOGGED_CONTAINER_STYLES}>
       <Form {...loginForm}>
         <form
           onSubmit={loginForm.handleSubmit(() =>

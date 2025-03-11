@@ -1,33 +1,25 @@
-import { useEffect, useState } from "react";
-import { Recommendation } from "../services/Recommendation/Recommendation";
 import recommendationApi from "../services/Recommendation";
 import useSelectedType from "./useSelectedType";
-import LinkedList, {
-  getRecommendationsListFromRecommendationsArray,
-} from "@/utils/data-structures/linkedList";
+import { getRecommendationsListFromRecommendationsArray } from "@/utils/data-structures/linkedList";
+import { useQuery } from "@tanstack/react-query";
 
 const useFetchRecommendations = () => {
-  const [recommendations, setRecommendations] =
-    useState<LinkedList<Recommendation> | null>(null);
-
   const { selectedType } = useSelectedType();
 
   const fetchRecommendations = async () => {
-    try {
-      const recommendationsResponse =
-        await recommendationApi.getAllRecommendationsFromAType(selectedType);
+    const recommendationsResponse =
+      await recommendationApi.getAllRecommendationsFromAType(selectedType);
 
-      setRecommendations(
-        getRecommendationsListFromRecommendationsArray(recommendationsResponse)
-      );
-    } catch (error) {
-      console.error(error);
-    }
+    return getRecommendationsListFromRecommendationsArray(
+      recommendationsResponse
+    );
   };
 
-  useEffect(() => {
-    fetchRecommendations();
-  }, []);
+  const { data: recommendations } = useQuery({
+    queryKey: ["recommendations"],
+    queryFn: fetchRecommendations,
+    retry: 2,
+  });
 
   return { recommendations };
 };

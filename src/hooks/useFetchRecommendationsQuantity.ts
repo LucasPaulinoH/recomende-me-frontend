@@ -1,24 +1,19 @@
-import { useEffect, useState } from "react";
 import recommendationApi from "../services/Recommendation";
+import { useQuery } from "@tanstack/react-query";
 
 const useFetchRecommendationsQuantity = () => {
-  const [recommendationsQuantity, setRecommendationsQuantity] = useState<
-    number[]
-  >([]);
-
   const fetchRecommendationsQuantity = async () => {
-    try {
-      const quantityResponse =
-        await recommendationApi.getRecommendationsQuantityByType();
-      setRecommendationsQuantity(quantityResponse);
-    } catch (error) {
-      console.error(error);
-    }
+    const quantityResponse =
+      await recommendationApi.getRecommendationsQuantityByType();
+    return quantityResponse;
   };
 
-  useEffect(() => {
-    fetchRecommendationsQuantity();
-  }, []);
+  const { data: recommendationsQuantity = [] } = useQuery({
+    queryKey: ["recommendationsQuantity"],
+    queryFn: fetchRecommendationsQuantity,
+
+    retry: 2,
+  });
 
   return { recommendationsQuantity };
 };

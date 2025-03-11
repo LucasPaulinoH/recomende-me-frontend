@@ -36,7 +36,7 @@ const RecommendationTypeCard = (props: RecommendationTypeCardProps) => {
 
   return (
     <div
-      className="border rounded-[10px] p-10 flex flex-row items-center gap-8 cursor-pointer hover:scale-110 transition-all"
+      className="w-full max-w-[300px] border rounded-[10px] p-10 flex flex-row items-center gap-8 cursor-pointer hover:scale-110 transition-all"
       onClick={handleClick}
     >
       {type === RecommendationType.BOOK ? (

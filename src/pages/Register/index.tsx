@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { UNLOGGED_CONTAINER } from "@/styles/shared";
+import { UNLOGGED_CONTAINER_STYLES } from "@/styles/shared";
 import { useRef } from "react";
 import { handleRegister } from "./functions";
 import { BackButtonContainer } from "@/components/BackButton";
@@ -28,7 +28,7 @@ const Register = () => {
   });
 
   return (
-    <div className={UNLOGGED_CONTAINER}>
+    <div className={UNLOGGED_CONTAINER_STYLES}>
       <BackButtonContainer />
       <Form {...registerForm}>
         <form
