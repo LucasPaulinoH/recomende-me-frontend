@@ -91,7 +91,7 @@ VITE_LAST_FM_API_KEY=last_fm_api_key
 
 1. Antes de iniciar a aplicação, é necessário configurar um banco de dados PostgreSQL. Certifique-se de que o PostgreSQL está instalado e crie um banco de dados com o nome desejado.
 
-2. No backend, configure as variáveis de ambiente conforme abaixo:
+2. No backend, configure as variáveis de ambiente conforme o exemplo abaixo:
 
 ```
 DATASOURCE_URL=jdbc:postgresql://localhost:5432/nome_do_db
